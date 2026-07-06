@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explora y elige · Sesión 1 · La Copa del Aula</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --paper:#FAF7F2; --ink:#1E1B16; --terra:#C8553D; --pine:#234B3D; --ochre:#B8811E; --muted:#6f6a62; --line:#E3D8C4; }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'Inter',system-ui,sans-serif; line-height:1.55; -webkit-text-size-adjust:100%}
+  .wrap{max-width:660px; margin:0 auto; padding:30px 20px 70px}
+  .view{display:none} .view.active{display:block}
+  .kick{font-family:'Inter'; font-weight:700; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--terra); margin:0 0 8px}
+  h1{font-family:'Fraunces',Georgia,serif; font-weight:900; font-size:clamp(30px,8vw,40px); line-height:1.02; letter-spacing:-.015em; margin:0 0 8px}
+  .sub{font-size:16px; color:var(--muted); margin:0 0 6px}
+  .pill{display:inline-block; font-family:'Inter'; font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--terra); border:1.5px solid var(--terra); border-radius:999px; padding:5px 12px; margin:14px 0 4px}
+  .counter{font-family:'Inter'; font-weight:700; font-size:13px; color:var(--pine); margin:16px 0 2px}
+  /* cards */
+  .card{display:block; width:100%; text-align:left; background:#fff; border:1.5px solid var(--line); border-radius:16px; padding:18px; margin:14px 0; cursor:pointer; color:inherit; transition:.14s; -webkit-tap-highlight-color:transparent}
+  .card:hover{border-color:var(--terra)}
+  .card.done{border-color:var(--pine); background:#F1F5F2}
+  .card .top{display:flex; align-items:center; gap:14px}
+  .card .ic{flex:0 0 auto; width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:24px; background:#F5EDDD}
+  .card.done .ic{background:#DDE9E0}
+  .card .tt{font-family:'Fraunces'; font-weight:600; font-size:20px; line-height:1.1}
+  .card .meta{font-family:'Inter'; font-weight:600; font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--terra); margin-top:2px}
+  .card .d{font-size:14.5px; color:var(--muted); margin:10px 0 0}
+  .card .cta{font-family:'Inter'; font-weight:700; font-size:13px; color:var(--pine); margin-top:10px; display:inline-flex; align-items:center; gap:6px}
+  .card .check{margin-left:auto; flex:0 0 auto; width:26px; height:26px; border:2px solid var(--line); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; color:#fff}
+  .card.done .check{background:var(--pine); border-color:var(--pine)}
+  /* back bar */
+  .back{display:inline-flex; align-items:center; gap:7px; background:none; border:0; font-family:'Inter'; font-weight:700; font-size:14px; letter-spacing:.02em; color:var(--terra); cursor:pointer; padding:8px 0; margin-bottom:6px}
+  /* video */
+  .ratio{position:relative; width:100%; padding-bottom:56.25%; border-radius:14px; overflow:hidden; background:#000; margin-top:8px}
+  .ratio iframe{position:absolute; top:0; left:0; width:100%; height:100%; border:0}
+  .vlink{font-size:14px; margin-top:12px} .vlink a{color:var(--terra)}
+  /* reading (relato + articulo) */
+  .read h2.title{font-family:'Fraunces'; font-weight:900; font-size:clamp(26px,6.5vw,38px); line-height:1.05; letter-spacing:-.015em; margin:6px 0 8px}
+  .read .rsub{font-family:'Fraunces'; font-style:italic; font-size:19px; color:var(--muted); margin:0 0 22px}
+  .read .rule{height:3px; width:54px; background:var(--terra); border-radius:2px; margin:0 0 26px}
+  .read h3{font-family:'Fraunces'; font-weight:600; font-size:22px; margin:30px 0 8px}
+  .read p{font-size:17.5px; margin:0 0 17px}
+  .read p.first::first-letter{font-family:'Fraunces'; font-weight:900; font-size:58px; float:left; line-height:.8; padding:6px 9px 0 0; color:var(--terra)}
+  .read .pull{font-family:'Fraunces'; font-weight:600; font-style:italic; font-size:22px; line-height:1.3; color:var(--pine); border-left:3px solid var(--terra); padding:5px 0 5px 18px; margin:26px 0}
+  .read .ladder{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:15px 17px; margin:22px 0; font-size:15px}
+  .read .ladder .dis{color:var(--terra); font-weight:700} .read .ladder .eng{color:var(--pine); font-weight:700}
+  .read .refs{margin-top:34px; padding-top:20px; border-top:1px solid var(--line); font-size:14px; color:var(--muted)}
+  .read .refs h4{font-family:'Inter'; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink); margin:0 0 8px}
+  .read .refs p{font-size:14px; margin:7px 0}
+  .read .end{margin-top:36px; padding-top:22px; border-top:1px solid var(--line)}
+  .read .end p{font-size:17.5px} .read .end b{color:var(--ink)}
+  /* presentation slideshow */
+  .stage{background:#fff; border:1.5px solid var(--line); border-radius:18px; padding:30px 26px; min-height:360px; display:flex; flex-direction:column; justify-content:center; margin-top:8px}
+  .pslide{display:none} .pslide.on{display:block; animation:fade .25s ease}
+  @keyframes fade{from{opacity:.3}to{opacity:1}}
+  .pslide .pk{font-family:'Inter'; font-weight:700; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--terra); margin:0 0 10px}
+  .pslide h3{font-family:'Fraunces'; font-weight:600; font-size:clamp(24px,6vw,32px); line-height:1.08; letter-spacing:-.01em; margin:0 0 12px}
+  .pslide p{font-size:17px; color:#33302a; margin:0}
+  .pslide .num{font-family:'Fraunces'; font-weight:900; font-size:34px; color:var(--terra); line-height:1; margin-bottom:6px}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 14px}
+  .chip{font-family:'Inter'; font-weight:700; font-size:13px; padding:7px 12px; border-radius:9px; border:2px solid}
+  .chip.dis{color:var(--terra); border-color:var(--terra); background:#F7E9E6}
+  .chip.eng{color:var(--pine); border-color:var(--pine); background:#EAF0EC}
+  .pnav{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:16px}
+  .pnav button{font-family:'Inter'; font-weight:700; font-size:15px; border:1.5px solid var(--line); background:#fff; color:var(--ink); border-radius:12px; padding:12px 20px; cursor:pointer; -webkit-tap-highlight-color:transparent}
+  .pnav button:disabled{opacity:.35; cursor:default}
+  .pnav .pcount{font-family:'Inter'; font-weight:700; font-size:13px; color:var(--muted); letter-spacing:.06em}
+  /* shared blocks */
+  .reflect{background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:16px 18px; margin:16px 0 0}
+  .reflect b{font-family:'Inter'; font-weight:700; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+  .reflect p{margin:6px 0 0; font-family:'Fraunces'; font-style:italic; font-size:17px}
+  .land{background:var(--ink); color:#F3EAD9; border-radius:18px; padding:24px 22px; margin:28px 0 0}
+  .land .l{font-family:'Inter'; font-weight:700; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--ochre); margin:0 0 8px}
+  .land p{font-family:'Fraunces'; font-size:20px; line-height:1.28; margin:0}
+  .foot{margin-top:26px; font-family:'Inter'; font-weight:600; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ============ HOME ============ -->
+<div class="view active" id="home">
+  <p class="kick">La Copa del Aula · Sesión 1</p>
+  <h1>Explora y elige</h1>
+  <p class="sub">Cuatro caminos, la misma idea al final. Toca uno para abrirlo aquí mismo.</p>
+  <span class="pill">~20 min · elige 2 de 4</span>
+  <p class="counter" id="counter">Has explorado 0 de 2</p>
+
+  <div class="card" id="c-video" onclick="openView('v-video','c-video')">
+    <div class="top"><div class="ic">▶</div>
+      <div><div class="tt">Un video</div><div class="meta">~7 min · se ve aquí</div></div>
+      <div class="check">✓</div></div>
+    <div class="d">Cómo enseñarles a los alumnos su propio nivel de compromiso.</div>
+    <div class="cta">Reproducir ▸</div>
+  </div>
+
+  <div class="card" id="c-relato" onclick="openView('v-relato','c-relato')">
+    <div class="top"><div class="ic">📖</div>
+      <div><div class="tt">Un relato</div><div class="meta">~8 min · lectura</div></div>
+      <div class="check">✓</div></div>
+    <div class="d">"El escalón de Beto": una clase que aprendió a mirarse.</div>
+    <div class="cta">Leer ▸</div>
+  </div>
+
+  <div class="card" id="c-pres" onclick="openView('v-pres','c-pres')">
+    <div class="top"><div class="ic">🖥️</div>
+      <div><div class="tt">Una presentación</div><div class="meta">~20 diapositivas · interactiva</div></div>
+      <div class="check">✓</div></div>
+    <div class="d">Hacer visible el compromiso, paso a paso. Avanza con los botones.</div>
+    <div class="cta">Abrir ▸</div>
+  </div>
+
+  <div class="card" id="c-art" onclick="openView('v-art','c-art')">
+    <div class="top"><div class="ic">📰</div>
+      <div><div class="tt">Un artículo</div><div class="meta">~9 min · lectura</div></div>
+      <div class="check">✓</div></div>
+    <div class="d">Por qué cada paso es crecimiento, con sus referencias.</div>
+    <div class="cta">Leer ▸</div>
+  </div>
+
+  <div class="reflect"><b>De vuelta en tu mesa</b>
+    <p>¿Qué cambia cuando el alumno conoce su propio nivel? Piensa en un alumno concreto: ¿qué escalón sería, para él, un avance real?</p></div>
+
+  <div class="land"><p class="l">A donde todos llegan</p>
+    <p>Cuando un alumno entiende su nivel de compromiso, puede tomar acción para subir. Cada paso es crecimiento. De Disruptivo a Evitando ya es avanzar. La meta es el movimiento, un escalón a la vez.</p></div>
+
+  <p class="foot">La Copa del Aula · ARJI 2026</p>
+</div>
+
+<!-- ============ VIDEO ============ -->
+<div class="view" id="v-video">
+  <button class="back" onclick="goHome()">‹ Volver a los caminos</button>
+  <p class="kick">Un video · ~7 min</p>
+  <div class="ratio">
+    <iframe id="ytframe" src="" title="Video · niveles de compromiso"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
+  <p class="vlink">¿No carga aquí? Ábrelo en <a href="https://www.youtube.com/watch?v=DNei2WNkg04" target="_blank" rel="noopener">YouTube</a>.</p>
+  <button class="back" onclick="goHome()" style="margin-top:14px">‹ Volver a los caminos</button>
+</div>
+
+<!-- ============ RELATO ============ -->
+<div class="view read" id="v-relato">
+  <button class="back" onclick="goHome()">‹ Volver a los caminos</button>
+  <p class="kick">Un relato · lectura ~8 min</p>
+  <h2 class="title">El escalón de Beto</h2>
+  <p class="rsub">Una historia sobre enseñarles a los alumnos dónde están parados.</p>
+  <div class="rule"></div>
+  <p class="first">Renata llevaba once años dando clase de secundaria y creía haberlo visto todo, hasta que llegó el grupo de tercero B. No eran crueles ni tontos. Eran, simplemente, un muro. Y contra ese muro rebotaba, todos los días a las diez de la mañana, Beto.</p>
+  <p>Beto tiraba el cuaderno al suelo para oír el golpe. Hacía comentarios en voz baja que provocaban risas justo cuando Renata explicaba lo importante. Se levantaba a sacar punta al lápiz con una lentitud calculada. En la sala de maestros lo llamaban "el problema del B", y Renata, en sus peores días, pensaba lo mismo.</p>
+  <p>Una tarde de viernes, agotada, se quedó mirando sus notas de un curso al que había ido sin muchas ganas. Hablaba de que el compromiso de un alumno no es un interruptor de encendido y apagado, sino un lugar en un camino. Que hay formas de desengancharse (tumbar la clase, evitar el trabajo, desaparecer en silencio) y formas de engancharse (participar, involucrarse, tomar las riendas). Seis escalones. Un continuo.</p>
+  <p>Lo que la detuvo no fue la teoría. Fue una idea pequeña al margen de la página: <em>¿y si los alumnos supieran en qué escalón están?</em></p>
+  <p>El lunes, Renata llegó temprano y pegó en la pared un cartel largo. A la izquierda, en rojo: Disruptivo, Evitando, Retirándose. A la derecha, en verde: Participando, Involucrado, Liderando. Cuando entró el grupo, no dijo "hoy vamos a portarnos bien". Dijo otra cosa.</p>
+  <p>"Esto no es sobre ser bueno o malo", empezó, señalando el cartel. "Es un mapa. Todos, incluida yo, estamos parados en algún punto de él en cada clase. Y lo interesante del mapa no es dónde estás hoy. Es que te puedes mover."</p>
+  <p>Hubo silencio, del bueno. Renata pidió algo raro: que cada quien, sin decirlo en voz alta, pensara en qué escalón había estado la clase pasada. Beto, desde el fondo, levantó la mano con una sonrisa de reto. "Yo estoy en el rojo, maestra. En Disruptivo. Ese soy yo."</p>
+  <p>Esperaba el regaño. La vieja Renata se lo habría dado. La nueva respiró y dijo: "Reconocer dónde estás es lo más difícil del mapa, Beto. Acabas de dar el primer paso que casi nadie da." Beto no supo qué hacer con eso. Nadie le había agradecido nunca por admitir que era el problema.</p>
+  <div class="pull">"No te pregunto por qué eres así. Te pregunto qué te llevaría un escalón hacia arriba."</div>
+  <p>Las semanas siguientes no fueron una película. Beto no se transformó. Pero algo en el aire había cambiado, porque ahora había un lenguaje. Cuando alguien se distraía, Renata no decía "pon atención"; decía "¿en qué escalón andas?". Y los alumnos, para su sorpresa, lo sabían.</p>
+  <p>Un miércoles, en plena explicación, Beto no tiró nada. No hizo ningún chiste. Se quedó mirando la ventana, ausente, con el cuaderno cerrado. Cualquier otro maestro habría visto apatía y lo habría anotado. Renata vio otra cosa. Al pasar junto a su banca, se agachó y le dijo bajito: "Hoy no tumbaste la clase. Te moviste de Disruptivo a Evitando. Eso es subir un escalón."</p>
+  <p>Beto la miró como si le hablara en otro idioma. "Pero no hice nada, maestra." "Exacto", dijo ella. "Y eso, en tu caso, es crecimiento." Por primera vez, Beto no supo si estaba en problemas o si lo estaban felicitando. Se quedó pensando el resto de la hora, que también, en su idioma, era un escalón.</p>
+  <p>No hubo un gran final. Hubo un proyecto sobre música que a Beto le importó, y en esa semana estuvo en Participando sin darse cuenta. Hubo días en que volvió al rojo. Pero ya no discutían si Beto era o no "el problema". Discutían en qué escalón estaba hoy y cuál seguía.</p>
+  <p>Renata entendió, tarde pero bien, que el cartel de la pared no había cambiado a Beto. Había cambiado lo que Beto podía ver de sí mismo. Antes solo tenía dos casillas: portarse bien o portarse mal. Ahora tenía un camino, y en un camino siempre hay un paso siguiente.</p>
+  <div class="end">
+    <p><b>El punto de la historia.</b> Cuando un alumno entiende en qué nivel de compromiso está, puede tomar acción para moverse en sentido positivo. Cada paso es crecimiento. Nadie espera que quien hoy está en Disruptivo lidere mañana; pasar de Disruptivo a Evitando ya es avanzar. La meta es el movimiento, un escalón a la vez, y empieza el día en que el alumno puede verse en el mapa.</p>
+    <p style="font-size:14px; color:var(--muted)">Continuo de compromiso basado en Berry, A. (2022). <i>Reimagining Student Engagement: From Disrupting to Driving</i>. Corwin. Relato de ficción con fines de formación docente.</p>
+  </div>
+  <button class="back" onclick="goHome()" style="margin-top:16px">‹ Volver a los caminos</button>
+</div>
+
+<!-- ============ PRESENTACIÓN ============ -->
+<div class="view" id="v-pres">
+  <button class="back" onclick="goHome()">‹ Volver a los caminos</button>
+  <p class="kick">Una presentación · avanza con los botones</p>
+  <div class="stage" id="stage">
+    <div class="pslide on"><div class="pk">Mini-curso</div><h3>Hazlo visible.</h3><p>Enseñarles a los alumnos su propio nivel de compromiso.</p></div>
+    <div class="pslide"><div class="pk">La vieja pregunta</div><h3>¿Enganchado o desenganchado?</h3><p>Dos casillas. Si un alumno está "desenganchado", su única salida es un salto enorme hasta la otra orilla. Casi nunca lo da.</p></div>
+    <div class="pslide"><div class="pk">La idea</div><h3>Un continuo, no un interruptor.</h3><p>Amy Berry, a partir de entrevistas con docentes, describió seis formas de relacionarse con el aprendizaje: de lo más desenganchado a lo más enganchado.</p></div>
+    <div class="pslide"><div class="pk">El lado del desenganche</div><h3>Tres formas de soltarse</h3><div class="chips"><span class="chip dis">Disruptivo</span><span class="chip dis">Evitando</span><span class="chip dis">Retirándose</span></div><p>Del que tumba la clase (activo) al que desaparece en silencio (pasivo). El silencio también es desenganche.</p></div>
+    <div class="pslide"><div class="pk">El lado del compromiso</div><h3>Tres formas de engancharse</h3><div class="chips"><span class="chip eng">Participando</span><span class="chip eng">Involucrado</span><span class="chip eng">Liderando</span></div><p>Del que cumple lo que se pide (pasivo) al que dirige su propio aprendizaje (activo).</p></div>
+    <div class="pslide"><div class="pk">El mapa completo</div><div class="chips"><span class="chip dis">Disruptivo</span><span class="chip dis">Evitando</span><span class="chip dis">Retirándose</span><span class="chip eng">Participando</span><span class="chip eng">Involucrado</span><span class="chip eng">Liderando</span></div><p>Entre tumbar la clase y dirigir el aprendizaje no hay un abismo: hay escalones. Y donde hay escalones, hay un paso siguiente que sí es alcanzable.</p></div>
+    <div class="pslide"><div class="pk">El giro</div><h3>El mapa no tiene por qué ser secreto del maestro.</h3><p>Casi todos los marcos de compromiso se diseñan para que el docente diagnostique. ¿Y si compartimos el mapa con los alumnos?</p></div>
+    <div class="pslide"><div class="pk">Beneficio 1</div><h3>Un lenguaje común</h3><p>El alumno deja de escuchar "pon atención", una orden vaga, y empieza a preguntarse "¿en qué escalón estoy y cuál sigue?", una pregunta que sí se puede accionar.</p></div>
+    <div class="pslide"><div class="pk">Beneficio 2</div><h3>Verse para moverse</h3><p>Ver el propio estado es el primer paso para poder regularlo. Es metacognición: nadie mejora lo que no puede nombrar.</p></div>
+    <div class="pslide"><div class="pk">Beneficio 3</div><h3>Autoeficacia y agencia.</h3><p>Berry insiste: la meta última no es el orden, sino que el alumno crea en su capacidad de influir en lo que le pasa y aprenda a conducirse hacia arriba.</p></div>
+    <div class="pslide"><div class="pk">Cómo se enseña</div><h3>Cuatro pasos.</h3><p>Presentar el mapa, ubicarse sin juicio, hablar el lenguaje del movimiento y celebrar cada paso.</p></div>
+    <div class="pslide"><div class="num">1</div><h3>Presenta el mapa</h3><p>Un cartel con los seis niveles, en las palabras del grupo. Aclara: esto no es sobre ser bueno o malo. Es un mapa, y todos, incluido el maestro, estamos parados en algún punto en cada clase.</p></div>
+    <div class="pslide"><div class="num">2</div><h3>Que se ubiquen, sin juicio</h3><p>Pide que cada quien piense, en silencio, en qué escalón estuvo la clase pasada. Reconocer dónde estás es lo más difícil del mapa. Cuando un alumno lo admite, agradécelo, no lo regañes.</p></div>
+    <div class="pslide"><div class="num">3</div><h3>El lenguaje del movimiento</h3><p>Cambia "pon atención" por "¿en qué escalón andas?". Cambia "¿por qué eres así?" por "¿qué te llevaría un escalón hacia arriba?". El foco pasa al paso siguiente.</p></div>
+    <div class="pslide"><div class="num">4</div><h3>Nombra y celebra el paso</h3><p>"Hoy no tumbaste la clase: te moviste de Disruptivo a Evitando. Eso es subir un escalón." Cuando el alumno oye que su avance se nota, descubre que el siguiente paso está a su alcance.</p></div>
+    <div class="pslide"><div class="pk">El corazón</div><h3>De Disruptivo a Evitando ya es crecimiento.</h3><p>Dejar de tumbar la clase, aunque todavía no participe, es subir un escalón. Es progreso real y merece reconocerse como tal.</p></div>
+    <div class="pslide"><div class="pk">Expectativas</div><h3>No exijas el salto</h3><p>Nadie espera que quien hoy está en Disruptivo aparezca mañana Liderando. La vara es el movimiento, no el destino.</p></div>
+    <div class="pslide"><div class="pk">Cuidado</div><h3>Un espejo, no una etiqueta</h3><p>"Tú eres Disruptivo" congela al alumno. "Hoy estuve en Disruptivo, ¿qué me llevaría un escalón arriba?" lo libera. El continuo sirve para verse y moverse, nunca para encasillar.</p></div>
+    <div class="pslide"><div class="pk">No lo olvides</div><h3>El que se retira</h3><p>Presente de cuerpo, ausente de mente, "vuela bajo el radar". No molesta, así que recibe menos atención, aunque su desconexión es tan seria como la del disruptivo.</p></div>
+    <div class="pslide"><div class="pk">Lo que se llevan</div><h3>Cuando el alumno se ve en el mapa, puede decidir subir.</h3><p>Cada paso es crecimiento. La meta es el movimiento, un escalón a la vez. Basado en Berry, A. (2022). Reimagining Student Engagement. Corwin.</p></div>
+  </div>
+  <div class="pnav">
+    <button id="pprev" onclick="pgo(-1)">‹ Atrás</button>
+    <span class="pcount" id="pcount">1 / 20</span>
+    <button id="pnext" onclick="pgo(1)">Siguiente ›</button>
+  </div>
+  <button class="back" onclick="goHome()" style="margin-top:16px">‹ Volver a los caminos</button>
+</div>
+
+<!-- ============ ARTÍCULO ============ -->
+<div class="view read" id="v-art">
+  <button class="back" onclick="goHome()">‹ Volver a los caminos</button>
+  <p class="kick">Un artículo · lectura ~9 min</p>
+  <h2 class="title">Cada paso es crecimiento</h2>
+  <p class="rsub">Por qué conviene enseñarles a los alumnos su propio nivel de compromiso.</p>
+  <div class="rule"></div>
+  <p style="font-size:19px">Durante décadas hablamos del compromiso en dos casillas: el alumno está enganchado o está desenganchado, es aplicado o es un problema. Es una forma cómoda de mirar el aula y una forma pobre de cambiarla. Porque si solo hay dos casillas, un alumno desenganchado solo tiene un salto posible, enorme e improbable, hasta la otra orilla. Y casi nunca lo da.</p>
+  <p>La investigadora australiana Amy Berry propone algo más útil: pensar el compromiso como un continuo, no como un interruptor. A partir de entrevistas con docentes, describió seis formas en que los alumnos se relacionan con el aprendizaje, que van de lo más desenganchado a lo más enganchado, y que pasan de lo pasivo a lo activo.</p>
+  <div class="ladder"><b>El continuo del compromiso (Berry)</b><br><span class="dis">Desenganche:</span> Disruptivo · Evitando · Retirándose<br><span class="eng">Compromiso:</span> Participando · Involucrado · Liderando</div>
+  <p>Visto así, entre "tumbar la clase" y "dirigir el propio aprendizaje" no hay un abismo: hay escalones. Y donde hay escalones, hay un paso siguiente que sí es alcanzable. Esa es la primera ganancia. La segunda, más potente, suele pasarse por alto: el mapa no tiene por qué ser secreto del maestro.</p>
+  <h3>Hacer visible el mapa</h3>
+  <p>La mayoría de los marcos de compromiso se diseñan para que el docente diagnostique. El giro consiste en compartir el mapa con los alumnos. Cuando un grupo conoce el continuo, gana un vocabulario para hablar de algo que antes solo sentía. Deja de escuchar "pon atención", una orden vaga, y empieza a preguntarse "¿en qué escalón estoy y cuál sigue?", una pregunta accionable.</p>
+  <p>Ver el propio estado es el primer paso para poder regularlo. En psicología del aprendizaje esto tiene nombre: metacognición y autoeficacia, la creencia del alumno en su capacidad de influir en lo que le pasa. Berry insiste en que la meta última no es el orden, sino construir esa autoeficacia y el sentido de agencia que permite al alumno conducirse hacia arriba.</p>
+  <div class="pull">Ver el propio nivel es el primer paso para poder moverlo. Nadie mejora lo que no puede nombrar.</div>
+  <h3>El movimiento es la meta, no el destino</h3>
+  <p>Aquí está el corazón, y es donde muchos programas de compromiso se equivocan. La expectativa no puede ser que un alumno que hoy está en Disruptivo aparezca mañana Liderando. Eso no es crecimiento, es fantasía, y cuando no ocurre, el alumno confirma que no era para él.</p>
+  <p>El continuo cambia la vara de medir. Pasar de Disruptivo a Evitando (dejar de tumbar la clase, aunque todavía no participe) es subir un escalón. Es progreso real y merece reconocerse. Lo mismo de Retirándose a Participando, o de Participando a Involucrado. Cada paso cuenta. Cuando el docente celebra el escalón y no exige el salto, el alumno descubre que el avance está a su alcance, y esa es la condición para que vuelva a intentarlo.</p>
+  <h3>Un espejo, no una etiqueta</h3>
+  <p>Una advertencia. El continuo sirve para verse y moverse, no para clasificar. Decirle a un alumno "tú eres Disruptivo" lo congela; ayudarlo a notar "hoy estuve en Disruptivo, ¿qué me llevaría un escalón arriba?" lo libera. Y conviene recordar al más invisible: el que está Retirándose, presente de cuerpo y ausente de mente. No molesta, así que recibe menos atención, aunque su desconexión es tan seria como la del disruptivo.</p>
+  <h3>Lo que se llevan</h3>
+  <p>Enseñarles a los alumnos el continuo no es una técnica más. Es entregarles el mapa de su propio aprendizaje. Cuando un alumno entiende en qué nivel está, puede tomar acción para moverse en sentido positivo. Cada paso es crecimiento. No se espera que quien hoy está en Disruptivo lidere mañana; pasar de Disruptivo a Evitando ya es avanzar. La meta es el movimiento, un escalón a la vez.</p>
+  <div class="refs">
+    <h4>Referencias</h4>
+    <p>Berry, A. (2022). <i>Reimagining Student Engagement: From Disrupting to Driving</i>. Corwin.</p>
+    <p>Bandura, A. (1997). <i>Self-Efficacy: The Exercise of Control</i>. W. H. Freeman.</p>
+    <p>CAST (2024). <i>UDL Guidelines 3.0</i>. udlguidelines.cast.org.</p>
+  </div>
+  <button class="back" onclick="goHome()" style="margin-top:16px">‹ Volver a los caminos</button>
+</div>
+
+</div>
+
+<script>
+  var YT = "https://www.youtube-nocookie.com/embed/DNei2WNkg04?rel=0";
+  function openView(view, cardId){
+    document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+    document.getElementById(view).classList.add('active');
+    if(view === 'v-video'){ document.getElementById('ytframe').src = YT + "&autoplay=1"; }
+    if(cardId){ document.getElementById(cardId).classList.add('done'); updateCounter(); }
+    window.scrollTo(0,0);
+  }
+  function goHome(){
+    document.getElementById('ytframe').src = "";   // stop the video
+    document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+    document.getElementById('home').classList.add('active');
+    window.scrollTo(0,0);
+  }
+  function updateCounter(){
+    var n = document.querySelectorAll('.card.done').length;
+    var c = document.getElementById('counter');
+    c.textContent = (n >= 2) ? ("Listo · exploraste " + n + ". Ahora reflexiona.") : ("Has explorado " + n + " de 2");
+  }
+  // slideshow
+  var pi = 0;
+  var slides = document.querySelectorAll('#stage .pslide');
+  function prender(){
+    slides.forEach(function(s,i){ s.classList.toggle('on', i === pi); });
+    document.getElementById('pcount').textContent = (pi+1) + " / " + slides.length;
+    document.getElementById('pprev').disabled = (pi === 0);
+    document.getElementById('pnext').disabled = (pi === slides.length - 1);
+  }
+  function pgo(d){ pi = Math.max(0, Math.min(slides.length - 1, pi + d)); prender(); }
+  document.addEventListener('keydown', function(e){
+    if(!document.getElementById('v-pres').classList.contains('active')) return;
+    if(e.key === 'ArrowRight') pgo(1);
+    if(e.key === 'ArrowLeft') pgo(-1);
+  });
+  prender();
+</script>
+</body>
+</html>
